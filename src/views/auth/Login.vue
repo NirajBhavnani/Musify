@@ -22,7 +22,7 @@ export default {
 
     const handleLogin = async () => {
       const res = await login(email.value, password.value);
-      if (!error) {
+      if (!error.value) {
         console.log("User logged in");
       }
     };
