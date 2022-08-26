@@ -4,7 +4,8 @@
       <img src="@/assets/music-logo.png" alt="Logo" />
       <h1><router-link :to="{ name: 'home' }">Musify!</router-link></h1>
       <div class="links">
-        <button>Log out</button>
+        <button @click="handleLogout" v-if="!isPending">Log out</button>
+        <button v-if="isPending" disabled>Loading</button>
         <router-link class="btn" :to="{ name: 'signup' }">Sign up</router-link>
         <router-link class="btn" :to="{ name: 'login' }">Log in</router-link>
       </div>
@@ -13,7 +14,25 @@
 </template>
 
 <script>
-export default {};
+import useLogout from "@/composables/useLogout";
+import { useRouter } from "vue-router";
+
+export default {
+  setup() {
+    const { error, logout, isPending } = useLogout();
+    const router = useRouter();
+
+    const handleLogout = async () => {
+      const res = await logout();
+      if (!error.value) {
+        console.log("User logged out");
+        router.push({ name: "login" });
+      }
+    };
+
+    return { error, handleLogout, isPending };
+  },
+};
 </script>
 
 <style scoped>
