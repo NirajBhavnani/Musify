@@ -4,21 +4,29 @@
       <img src="@/assets/music-logo.png" alt="Logo" />
       <h1><router-link :to="{ name: 'home' }">Musify!</router-link></h1>
       <div class="links">
-        <button @click="handleLogout" v-if="!isPending">Log out</button>
-        <button v-if="isPending" disabled>Loading</button>
-        <router-link class="btn" :to="{ name: 'signup' }">Sign up</router-link>
-        <router-link class="btn" :to="{ name: 'login' }">Log in</router-link>
+        <div v-if="user">
+          <button @click="handleLogout" v-if="!isPending">Log out</button>
+          <button v-if="isPending" disabled>Loading</button>
+        </div>
+        <div v-else>
+          <router-link class="btn" :to="{ name: 'signup' }"
+            >Sign up</router-link
+          >
+          <router-link class="btn" :to="{ name: 'login' }">Log in</router-link>
+        </div>
       </div>
     </nav>
   </div>
 </template>
 
 <script>
+import getUser from "@/composables/getUser";
 import useLogout from "@/composables/useLogout";
 import { useRouter } from "vue-router";
 
 export default {
   setup() {
+    const { user } = getUser();
     const { error, logout, isPending } = useLogout();
     const router = useRouter();
 
@@ -30,7 +38,7 @@ export default {
       }
     };
 
-    return { error, handleLogout, isPending };
+    return { error, handleLogout, isPending, user };
   },
 };
 </script>
