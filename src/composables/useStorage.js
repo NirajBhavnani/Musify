@@ -15,7 +15,7 @@ const useStorage = () => {
 
     try {
       const res = await storageRef.put(file); //uploading the file wrt reference
-      url.value = res.ref.getDownloadURL(); //fetching the public URL of the uploaded file
+      url.value = await res.ref.getDownloadURL(); //fetching the public URL of the uploaded file
     } catch (err) {
       console.log(err.message);
       error.value = err.message;
