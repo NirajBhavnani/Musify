@@ -8,8 +8,8 @@
       v-model="description"
     ></textarea>
     <label>Upload playlist cover image</label>
-    <input type="file" />
-    <div class="error"></div>
+    <input type="file" @change="handleFile" />
+    <div class="error">{{ fileError }}</div>
     <button>Create</button>
   </form>
 </template>
@@ -20,10 +20,30 @@ export default {
   setup() {
     const title = ref("");
     const description = ref("");
+    const file = ref(null);
+    const fileError = ref(null);
+
+    // allowed file types
+    const types = ["image/png", "image/jpeg", "image/jpg"];
 
     const handleCreate = () => {};
 
-    return { title, description, handleCreate };
+    // when we fire an event like this, we get access to an event object as an automatic argument
+    // from this event object, we get information about the file that's selected
+    const handleFile = (e) => {
+      const selected = e.target.files[0]; //to access the selected file object
+      console.log(selected);
+
+      if (selected && types.includes(selected.type)) {
+        file.value = selected;
+        fileError.value = null;
+      } else {
+        file.value = null;
+        fileError.value = "Please select an image file(png, jpeg/jpg)";
+      }
+    };
+
+    return { title, description, handleCreate, handleFile, fileError };
   },
 };
 </script>
