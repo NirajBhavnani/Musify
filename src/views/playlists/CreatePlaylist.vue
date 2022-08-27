@@ -16,8 +16,12 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import useStorage from "@/composables/useStorage";
+
 export default {
   setup() {
+    const { url, filePath, uploadImage } = useStorage();
+
     const title = ref("");
     const description = ref("");
     const file = ref(null);
@@ -26,13 +30,16 @@ export default {
     // allowed file types
     const types = ["image/png", "image/jpeg", "image/jpg"];
 
-    const handleCreate = () => {};
+    const handleCreate = async () => {
+      if (file.value) {
+        await uploadImage(file.value);
+      }
+    };
 
     // when we fire an event like this, we get access to an event object as an automatic argument
     // from this event object, we get information about the file that's selected
     const handleFile = (e) => {
       const selected = e.target.files[0]; //to access the selected file object
-      console.log(selected);
 
       if (selected && types.includes(selected.type)) {
         file.value = selected;
