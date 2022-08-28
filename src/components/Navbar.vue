@@ -5,6 +5,9 @@
       <h1><router-link :to="{ name: 'home' }">Musify!</router-link></h1>
       <div class="links">
         <div v-if="user">
+          <router-link :to="{ name: 'createPlaylist' }" class="btn"
+            >Create Playlist</router-link
+          >
           <button @click="handleLogout" v-if="!isPending">Log out</button>
           <button v-if="isPending" disabled>Loading</button>
         </div>
