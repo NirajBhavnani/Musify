@@ -11,6 +11,7 @@
           <router-link :to="{ name: 'userPlaylists' }" class="btn"
             >My Playlists</router-link
           >
+          <span>Hi there, {{ user.displayName }}</span>
           <button @click="handleLogout" v-if="!isPending">Log out</button>
           <button v-if="isPending" disabled>Loading</button>
         </div>
@@ -74,5 +75,12 @@ nav .links a,
 button {
   margin-left: 16px;
   font-size: 14px;
+}
+span {
+  font-size: 14px;
+  display: inline-block;
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 1px solid #eee;
 }
 </style>
