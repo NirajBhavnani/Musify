@@ -1,12 +1,16 @@
 import { ref, watchEffect } from "vue";
 import { firestore } from "../firebase/config";
 
-const getCollection = (collection) => {
+const getCollection = (collection, query) => {
   const documents = ref(null);
   const error = ref(null);
 
   // register the firestore collection reference
   let collectionRef = firestore.collection(collection).orderBy("createdAt");
+
+  if (query) {
+    collectionRef = collectionRef.where(...query);
+  }
 
   const unsub = collectionRef.onSnapshot(
     (snap) => {
