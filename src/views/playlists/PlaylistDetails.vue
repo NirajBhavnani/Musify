@@ -21,7 +21,9 @@
 import getDocument from "@/composables/getDocument";
 import getUser from "@/composables/getUser";
 import useDocument from "@/composables/useDocument";
+import useStorage from "@/composables/useStorage";
 import { computed } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 
 export default {
   props: ["pid"],
@@ -31,6 +33,9 @@ export default {
     const { error, document: playlist } = getDocument("playlists", props.pid);
     const { user } = getUser();
     const { deleteDoc } = useDocument("playlists", props.pid);
+    const { deleteImage } = useStorage();
+
+    const router = useRouter();
 
     // making a computed property, since user value can change and ownership is dependent on user
     const ownership = computed(() => {
@@ -40,7 +45,10 @@ export default {
     });
 
     const handleDelete = async () => {
+      await deleteImage(playlist.value.filePath); //deleting the image from storage associated with the doc
       await deleteDoc();
+
+      router.push({ name: "home" });
     };
 
     return { error, playlist, ownership, deleteDoc, handleDelete };
