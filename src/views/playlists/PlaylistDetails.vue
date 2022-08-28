@@ -8,6 +8,7 @@
       <h2>{{ playlist.title }}</h2>
       <p class="username">Created by {{ playlist.userName }}</p>
       <p class="description">{{ playlist.description }}</p>
+      <button v-if="ownership" @click="handleDelete">Delete playlist</button>
     </div>
 
     <div class="song-list">
@@ -18,6 +19,9 @@
 
 <script>
 import getDocument from "@/composables/getDocument";
+import getUser from "@/composables/getUser";
+import useDocument from "@/composables/useDocument";
+import { computed } from "@vue/runtime-core";
 
 export default {
   props: ["pid"],
@@ -25,8 +29,21 @@ export default {
   setup(props) {
     // we are referring document as playlist
     const { error, document: playlist } = getDocument("playlists", props.pid);
+    const { user } = getUser();
+    const { deleteDoc } = useDocument("playlists", props.pid);
 
-    return { error, playlist };
+    // making a computed property, since user value can change and ownership is dependent on user
+    const ownership = computed(() => {
+      return (
+        playlist.value && user.value && user.value.uid === playlist.value.userId
+      );
+    });
+
+    const handleDelete = async () => {
+      await deleteDoc();
+    };
+
+    return { error, playlist, ownership, deleteDoc, handleDelete };
   },
 };
 </script>
