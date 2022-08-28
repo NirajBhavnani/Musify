@@ -12,6 +12,7 @@
 <script>
 import useLogin from "@/composables/useLogin";
 import { ref } from "@vue/reactivity";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -20,10 +21,12 @@ export default {
     const email = ref("");
     const password = ref("");
 
+    const router = useRouter();
+
     const handleLogin = async () => {
       const res = await login(email.value, password.value);
       if (!error.value) {
-        console.log("User logged in");
+        router.push({ name: "home" });
       }
     };
 

@@ -13,6 +13,7 @@
 <script>
 import useSignup from "@/composables/useSignup";
 import { ref } from "@vue/reactivity";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -22,10 +23,12 @@ export default {
     const password = ref("");
     const displayName = ref("");
 
+    const router = useRouter();
+
     const handleSignup = async () => {
       const res = await signup(email.value, password.value, displayName.value);
       if (!error.value) {
-        console.log("User signed up");
+        router.push({ name: "home" });
       }
     };
 

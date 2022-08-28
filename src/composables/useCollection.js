@@ -11,8 +11,9 @@ const useCollection = (collection) => {
     isPending.value = true;
 
     try {
-      await firestore.collection(collection).add(doc);
+      const res = await firestore.collection(collection).add(doc);
       isPending.value = false;
+      return res; //storing the response object to fetch the id of doc
     } catch (err) {
       console.log(err.message);
       error.value = "could not send the message";
